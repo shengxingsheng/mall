@@ -1,0 +1,23 @@
+server:
+  port: 10086
+spring:
+  application:
+    name: mall-gateway
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.1.100:8848
+        namespace: a425bfb2-f541-4efb-8344-f9717e63d24a
+        group: mall_gateway_group
+        file-extension: yml
+        shared-configs:
+          - data-id: nacos.yml
+            group: shared_group
+            refresh: true
+          - data-id: sentinel.yml
+            group: shared_group
+            refresh: true
+          - data-id: zipkin.yml
+            group: shared_group
+            refresh: true
+

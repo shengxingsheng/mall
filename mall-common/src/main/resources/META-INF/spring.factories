@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.mall.common.config.MybatisPlusConfig,\
+org.mall.common.config.WebConfig,\
+org.mall.common.exception.GlobalControllerExceptionHandler

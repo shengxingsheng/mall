@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mall.product.mapper.ProductAttrValueMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.mall.product.entity.ProductAttrValue">
+        <id column="id" property="id" />
+        <result column="spu_id" property="spuId" />
+        <result column="attr_id" property="attrId" />
+        <result column="attr_name" property="attrName" />
+        <result column="attr_value" property="attrValue" />
+        <result column="attr_sort" property="attrSort" />
+        <result column="quick_show" property="quickShow" />
+        <result column="is_deleted" property="deleted" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, spu_id, attr_id, attr_name, attr_value, attr_sort, quick_show, is_deleted, create_by, create_time, update_by, update_time
+    </sql>
+    <resultMap id="spuItemBaseAttrVo" type="org.mall.product.vo.SpuItemBaseAttrVo">
+        <result column="groupName" property="groupName"></result>
+        <collection property="attrs" ofType="org.mall.product.vo.SpuBaseAttrVo">
+            <result column="attrName" property="attrName"></result>
+            <result column="attrValue" property="attrValue"></result>
+        </collection>
+    </resultMap>
+    <select id="getAttrGroupWithAttrsBySpuId" resultMap="spuItemBaseAttrVo">
+        SELECT
+            ag.attr_group_name groupName,
+            pa.attr_name attrName,
+            pa.attr_value attrValue
+
+        FROM
+            pms_product_attr_value pa
+                LEFT JOIN pms_attr_attrgroup_relation aa ON pa.attr_id = aa.attr_id
+                LEFT JOIN pms_attr_group ag ON ag.attr_group_id = aa.attr_group_id
+        WHERE
+            pa.spu_id = #{spuId}
+          AND pa.is_deleted = 0
+    </select>
+
+</mapper>

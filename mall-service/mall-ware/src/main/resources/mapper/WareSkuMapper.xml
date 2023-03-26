@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mall.ware.mapper.WareSkuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.mall.ware.entity.WareSku">
+        <id column="id" property="id"/>
+        <result column="sku_id" property="skuId"/>
+        <result column="ware_id" property="wareId"/>
+        <result column="stock" property="stock"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="stock_locked" property="stockLocked"/>
+        <result column="is_deleted" property="deleted"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, sku_id, ware_id, stock, sku_name, stock_locked, is_deleted, create_by, create_time, update_by, update_time
+    </sql>
+    <update id="lockSkuStock">
+        UPDATE wms_ware_sku
+        SET stock_locked = stock_locked + #{num}
+        WHERE
+            is_deleted = 0
+          AND sku_id = #{skuId}
+          AND ware_id = #{wareId}
+          AND stock - stock_locked >= #{num};
+    </update>
+    <update id="unlockStock">
+        UPDATE wms_ware_sku
+        SET stock_locked = stock_locked - #{skuNum}
+        WHERE
+            is_deleted = 0
+          AND sku_id = #{skuId}
+          AND ware_id = #{wareId}
+    </update>
+    <select id="filterByStock" resultType="long">
+        SELECT sku_id
+        FROM wms_ware_sku
+        WHERE is_deleted = 0 and sku_id IN
+        <foreach collection="skuIdList" item="skuId" open="(" separator="," close=")">
+            #{skuId}
+        </foreach>
+        GROUP BY sku_id HAVING SUM(stock-stock_locked) > 0;
+    </select>
+    <select id="listWareIdHasStock" resultType="java.lang.Long">
+        SELECT
+            ware_id
+        FROM
+            wms_ware_sku
+        WHERE
+            is_deleted = 0
+          AND sku_id = #{skuId}
+          AND stock - stock_locked >= #{num};
+    </select>
+
+</mapper>

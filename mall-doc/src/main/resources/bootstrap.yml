@@ -1,0 +1,16 @@
+server:
+  port: 10123
+spring:
+  application:
+    name: mall-doc
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.200.100:8848
+        namespace: a425bfb2-f541-4efb-8344-f9717e63d24a
+        group: mall_doc_group
+        file-extension: yml
+        shared-configs:
+          - data-id: nacos.yml
+            group: shared_group
+            refresh: true

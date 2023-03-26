@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mall.product.mapper.SkuSaleAttrValueMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.mall.product.entity.SkuSaleAttrValue">
+        <id column="id" property="id" />
+        <result column="sku_id" property="skuId" />
+        <result column="attr_id" property="attrId" />
+        <result column="attr_name" property="attrName" />
+        <result column="attr_value" property="attrValue" />
+        <result column="attr_sort" property="attrSort" />
+        <result column="is_deleted" property="deleted" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, sku_id, attr_id, attr_name, attr_value, attr_sort, is_deleted, create_by, create_time, update_by, update_time
+    </sql>
+
+    <resultMap id="skuItemSaleAttrVo" type="org.mall.product.vo.SkuItemSaleAttrVo">
+        <result column="attrId" property="attrId"></result>
+        <result column="attrName" property="attrName"></result>
+        <collection property="attrValues" ofType="org.mall.product.vo.AttrValueWithSkuIdVO">
+            <result column="attrValue" property="attrValue"></result>
+            <result column="skuIds" property="skuIds"></result>
+        </collection>
+    </resultMap>
+    <select id="getSaleAttrsBySpuId" resultMap="skuItemSaleAttrVo">
+        SELECT
+        -- si.sku_id skuId,
+        ss.attr_id attrId,
+        ss.attr_name attrName,
+        ss.attr_value attrValue,
+        GROUP_CONCAT(DISTINCT ss.sku_id) skuIds
+        FROM pms_sku_info si
+                 LEFT JOIN pms_sku_sale_attr_value ss ON ss.sku_id = si.sku_id
+        WHERE si.spu_id = #{spuId}
+          AND si.is_deleted = 0 AND ss.is_deleted = 0
+        GROUP BY ss.attr_id ,ss.attr_name,ss.attr_value
+    </select>
+    <select id="getSaleAttrString" resultType="java.lang.String">
+        SELECT
+            CONCAT(attr_name,":",attr_value)
+        FROM pms_sku_sale_attr_value
+        WHERE sku_id = #{skuId} and is_deleted = 0
+    </select>
+
+</mapper>

@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.200.100:3306/${my.generator.db}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+my:
+  generator:
+    shared-name: ware
+    shared-pre: wms
+    base-path: C:\Users\sxs\projects\IdeaProjects\gulimall\mall\
+    db: mall_${my.generator.shared-pre}
+    table-prefix: ${my.generator.shared-pre}_
+    module-name: mall-service\mall-${my.generator.shared-name}
+    package-parent: org.mall.${my.generator.shared-name}
+    entity-path: mall-service-api\mall-${my.generator.shared-name}-api
+    author: sxs
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+

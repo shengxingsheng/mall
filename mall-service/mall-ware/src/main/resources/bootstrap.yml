@@ -1,0 +1,34 @@
+server:
+  port: 10005
+spring:
+  application:
+    name: mall-ware
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.1.100:8848
+        file-extension: yml
+        namespace: a425bfb2-f541-4efb-8344-f9717e63d24a
+        group: mall_ware_group
+        shared-configs:
+          - data-id: shared.yml
+            group: shared_group
+            refresh: true
+          - data-id: nacos.yml
+            group: shared_group
+            refresh: true
+          - data-id: session.yml
+            group: shared_group
+            refresh: true
+          - data-id: seata.yml
+            group: shared_group
+            refresh: true
+          - data-id: session.yml
+            group: shared_group
+            refresh: true
+          - data-id: sentinel.yml
+            group: shared_group
+            refresh: true
+          - data-id: zipkin.yml
+            group: shared_group
+            refresh: true
